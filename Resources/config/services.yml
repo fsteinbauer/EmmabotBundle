@@ -1,0 +1,90 @@
+services:
+    emmabot:
+        class: EmmabotBundle\Services\EmmaBot
+        arguments:
+          - "@emmabot.input_chain"
+          - "@emmabot.intent_selector"
+
+    emmabot.input_chain:
+        class: EmmabotBundle\InputProcessor\InputProcessorChain
+
+    emmabot.processor.ner:
+        public: false
+        class: EmmabotBundle\InputProcessor\EntityExtractionInputProcessor
+        arguments:
+          - "@core_nlp"
+        tags:
+          - { name: emmabot.processor.input, priority: 100 }
+
+
+    emmabot.intent_selector:
+        class: EmmabotBundle\Intent\IntentSelector
+        arguments:
+            - "@kernel"
+            - "@emmabot.manager.context"
+
+
+    emmabot.manager.context:
+        class: EmmabotBundle\Intent\ContextManager
+        arguments:
+          - "@security.token_storage"
+          - "@emmabot.repository.context"
+          - "@doctrine.orm.entity_manager"
+
+
+    # Registered Intents
+    emmabot.intent.help:
+        class: EmmabotBundle\Intent\HelpIntent
+        tags:
+          - { name: emmabot.intent, id: "help" }
+
+    emmabot.intent.search:
+        class: EmmabotBundle\Intent\SearchIntent
+        arguments:
+          - '@emmabot.search.elastic'
+        tags:
+          - { name: emmabot.intent, id: "search" }
+
+    emmabot.intent.tagesbericht:
+        class: EmmabotBundle\Intent\TagesberichtIntent
+        arguments:
+          - '@emmabot.search.elastic'
+        tags:
+          - { name: emmabot.intent, id: "tagesbericht" }
+
+    emmabot.intent.addCustomer:
+        class: EmmabotBundle\Intent\AddCustomerIntent
+        arguments:
+          - "@doctrine.orm.entity_manager"
+          - '@router'
+          - '@emmabot.resolver.googlemaps'
+        tags:
+          - { name: emmabot.intent, id: "add" }
+
+    # -------------------
+
+
+    emmabot.repository.context:
+      class: Doctrine\ORM\EntityRepository
+      factory: ['@doctrine.orm.entity_manager', getRepository]
+      arguments:
+        - EmmabotBundle\Entity\Context
+
+
+    emmabot.listener.client_view:
+      class: EmmabotBundle\EventListener\ClientViewSubscriber
+      arguments:
+        - '@emmabot.manager.context'
+      tags:
+          - { name: kernel.event_subscriber }
+
+    emmabot.search.elastic:
+      class: EmmabotBundle\Search\ElasticSearchService
+      arguments:
+        - '@fos_elastica.index_manager'
+        - '@router'
+
+    emmabot.resolver.googlemaps:
+      class: EmmabotBundle\Resolver\GoogleMapsAddressResolver
+      arguments:
+        - '@bazinga_geocoder.geocoder'

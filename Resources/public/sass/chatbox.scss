@@ -1,0 +1,243 @@
+
+$green: #86BB71;
+$blue: #94C2ED;
+$orange: #E38968;
+$gray: #92959E;
+
+.chat {
+
+  bottom: -469px;
+  position: fixed;
+  right: 10px;
+  width: 290px;
+  z-index: 100;
+  background: #F2F5F8;
+  color: #434651;
+
+  &.chat-opened {
+    bottom: 0;
+    border-top-left-radius: 5px !important;
+    border-top-right-radius: 5px !important;
+    box-shadow: -5px 5px rgba(102, 102, 102, 0.1);
+  }
+
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .chat-header {
+    padding: 8px 14px 7px 14px;
+    background-color: #3d3d3d;
+    color: #EEE;
+    cursor: pointer;
+    border-top-left-radius: 5px !important;
+    border-top-right-radius: 5px !important;
+
+    .chat-header-name {
+      float: left;
+    }
+
+    .fa {
+      float: right;
+      color: #D8DADF;
+      padding-top: 2px;
+    }
+  }
+
+  .chat-history {
+    padding: 10px 15px;
+    border-bottom: 1px solid #e0e7ef;
+    overflow-y: scroll;
+    height: 375px;
+
+    .timestamp{
+      text-align: center;
+      margin-bottom: 10px;
+
+      span {
+        display: inline-block;
+        background: rgba(0, 0, 0, 0.08);
+        padding: .4em 1em;
+        border-radius: 2em !important;
+        font-size: 0.8em;
+      }
+    }
+
+    .message-data {
+      color: lighten($gray, 20%);
+      margin-bottom: 15px;
+      font-size: .8em;
+    }
+
+    .message-data-time {
+      color: lighten($gray, 8%);
+      padding-left: 6px;
+    }
+
+    .message {
+      padding: 7px 14px;
+      font-size: 13px;
+      line-height: 18px;
+      border-radius: 7px;
+      margin-bottom: 11px;
+      width: 90%;
+      position: relative;
+      background: white;
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.03);
+
+      &:after {
+        bottom: 100%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        border-width: 5px;
+        margin-left: -10px;
+        top: 0;
+
+      }
+    }
+
+    .other-message:after {
+      right: -10px;
+      border-left-color: #FFF;
+      border-top-color: #FFF;
+    }
+
+    .my-message:after {
+      left: 0;
+      border-right-color: #FFF;
+      border-top-color: #FFF;
+    }
+
+  }
+
+  .chat-message {
+    padding: 0;
+
+    textarea {
+      width: 100%;
+      border: none;
+      padding: 10px 20px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      resize: none;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .fa-file-o, .fa-file-image-o {
+      font-size: 16px;
+      color: gray;
+      cursor: pointer;
+
+    }
+
+    button {
+      float: right;
+      color: $blue;
+      font-size: 16px;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      background: #F2F5F8;
+
+      &:hover {
+        color: darken($blue, 7%);
+      }
+    }
+  }
+}
+
+.online, .offline, .me {
+  margin-right: 3px;
+  font-size: 10px;
+}
+
+.online {
+  color: $green;
+}
+
+.offline {
+  color: $orange;
+}
+
+.me {
+  color: $blue;
+}
+
+.align-left {
+  text-align: left;
+}
+
+.align-right {
+  text-align: right;
+}
+
+.float-right {
+  float: right;
+}
+
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+
+
+
+
+@keyframes blink {
+  /**
+   * At the start of the animation the dot
+   * has an opacity of .2
+   */
+  0% {
+    opacity: .2;
+  }
+  /**
+   * At 20% the dot is fully visible and
+   * then fades out slowly
+   */
+  20% {
+    opacity: 1;
+  }
+  /**
+   * Until it reaches an opacity of .2 and
+   * the animation can start again
+   */
+  100% {
+    opacity: .2;
+  }
+}
+
+.chat-loading span {
+  color: #666; //develish
+  font-size: .8em;
+  display: inline-block;
+  & + span {
+    margin-left: .2em;
+  }
+
+  animation-name: blink;
+  animation-duration: 1.4s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+.chat-loading span:nth-child(2) {
+  animation-delay: .2s;
+}
+.chat-loading span:nth-child(3) {
+  animation-delay: .4s;
+}
+
